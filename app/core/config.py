@@ -1,33 +1,29 @@
-from functools import lru_cache
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "FastAPI Clean Architecture"
-    API_V1_PREFIX: str = "/api/v1"
-    DEBUG: bool = False
-
-    SECRET_KEY: str = "change-this-secret-key"
-    ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
-    REFRESH_TOKEN_EXPIRE_DAYS: int = 30
-    RESET_TOKEN_EXPIRE_MINUTES: int = 10
-
-    OTP_LENGTH: int = 6
-    OTP_EXPIRE_MINUTES: int = 10
-    OTP_MAX_ATTEMPTS: int = 5
-
-    DATABASE_URL: str = "sqlite+aiosqlite:///./app.db"
-
-    BACKEND_CORS_ORIGINS: list[str] = ["*"]
+    """Application configuration, loaded from environment variables / .env file."""
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
+    PROJECT_NAME: str = "Real Estate API"
+    API_V1_PREFIX: str = "/api/v1"
+    DEBUG: bool = False
 
-@lru_cache
-def get_settings() -> Settings:
-    return Settings()
+    DATABASE_URL: str = "postgresql+psycopg2://postgres:postgres@localhost:5432/real_estate"
+
+    JWT_SECRET: str = "change-me"
+    JWT_ALGORITHM: str = "HS256"
+    JWT_EXPIRE_MINUTES: int = 60 * 24
+    JWT_REFRESH_EXPIRE_MINUTES: int = 60 * 24 * 7
+
+    BACKEND_CORS_ORIGINS: list[str] = ["*"]
+
+    UPLOAD_DIR: str = "uploads"
+    MAX_UPLOAD_SIZE_MB: int = 5
+
+    DEFAULT_PAGE_SIZE: int = 20
+    MAX_PAGE_SIZE: int = 100
 
 
-settings = get_settings()
+settings = Settings()
